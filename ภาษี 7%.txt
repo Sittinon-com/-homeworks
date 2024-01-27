@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+#define TAX_RATE 0.07
+
+struct employee {
+  char name[32];
+  int salary;
+};
+
+void calc_tax(struct employee *emp, int n) {
+  int total_salary = 0;
+  for (int i = 0; i < n; i++) {
+    total_salary += emp[i].salary;
+  }
+
+  int tax = total_salary * TAX_RATE;
+
+  printf("All salary Per year: %d\n", total_salary);
+  printf("Tax 7% Per year: %d\n", tax);
+}
+
+void find_max_tax(struct employee *emp, int n, struct employee *max) {
+  int max_tax = 0;
+  for (int i = 0; i < n; i++) {
+    if (emp[i].salary * TAX_RATE > max_tax) {
+      max_tax = emp[i].salary * TAX_RATE;
+      *max = emp[i];
+    }
+  }
+}
+
+int main() {
+  struct employee emp[10];
+  int n;
+
+  printf("Enter employee information:\n");
+  for (n = 0;; n++) {
+    printf("Employee %d's Name: ", n + 1);
+    scanf("%31s", emp[n].name);
+    if (emp[n].name[0] == '-') {
+      break;
+    }
+    printf("Salary (Bath/Month): ");
+    scanf("%d", &emp[n].salary);
+  }
+
+  calc_tax(emp, n);
+
+  struct employee max;
+  find_max_tax(emp, n, &max);
+  printf("Most tax in company: %s (%d Bath per year)\n", max.name, max.salary * TAX_RATE);
+
+  return 0;
+}
