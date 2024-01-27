@@ -1,0 +1,93 @@
+#include <stdio.h>
+
+// โครงสร้าง Node
+struct node {
+    char data[10]; // เปลี่ยน int เป็น char array เพื่อเก็บข้อความ
+    struct node *next;
+};
+
+// ฟังก์ชันสำหรับสลับ Node
+struct node* swapNodes(struct node* head, const char* a, const char* b) {
+    if (head == NULL || head->next == NULL) {
+        printf("Linkedlist ว่างหรือมีข้อมูลน้อยกว่า 2 ตัว ไม่สามารถสลับ Node ได้!\n");
+        return head;
+    }
+
+    struct node *prevA = NULL, *curA = head, *prevB = NULL, *curB = head;
+
+    // ค้นหา Node A และ B
+    while (curA != NULL && strcmp(curA->data, a) != 0) {
+        prevA = curA;
+        curA = curA->next;
+    }
+
+    while (curB != NULL && strcmp(curB->data, b) != 0) {
+        prevB = curB;
+        curB = curB->next;
+    }
+
+    // ตรวจสอบว่า Node A และ B อยู่ใน Linkedlist หรือไม่
+    if (curA == NULL || curB == NULL) {
+        printf("ไม่พบ Node A หรือ B ใน Linkedlist!\n");
+        return head;
+    }
+
+    // ทำการสลับ Node A และ B
+    if (prevA == NULL) {
+        head = curB;
+    } else {
+        prevA->next = curB;
+    }
+
+    if (prevB == NULL) {
+        head = curA;
+    } else {
+        prevB->next = curA;
+    }
+
+    // ทำการปรับ next ของ Node A และ B
+    struct node* temp = curA->next;
+    curA->next = curB->next;
+    curB->next = temp;
+
+    return head;
+}
+
+// ฟังก์ชันสำหรับพิมพ์ข้อมูลใน Linkedlist
+void printList(struct node* head) {
+    struct node* cur = head;
+
+    while (cur != NULL) {
+        printf("%s ", cur->data);
+        cur = cur->next;
+    }
+
+    printf("\n");
+}
+
+int main() {
+    // สร้าง Linkedlist ตัวอย่าง
+    struct node head = {"one", NULL};
+    struct node node2 = {"two", NULL};
+    struct node node3 = {"three", NULL};
+    struct node node4 = {"four", NULL};
+    struct node node5 = {"five", NULL};
+
+    head.next = &node2;
+    node2.next = &node3;
+    node3.next = &node4;
+    node4.next = &node5;
+
+    // พิมพ์ข้อมูล Linkedlist ก่อนสลับ Node
+    printf("Linkedlist ก่อนสลับ Node: ");
+    printList(&head);
+
+    // สลับ Node A และ B
+    struct node* newHead = swapNodes(&head, "one", "four");
+
+    // พิมพ์ข้อมูล Linkedlist หลังสลับ Node
+    printf("Linkedlist หลังสลับ Node: ");
+    printList(newHead);
+
+    return 0;
+}// end funtion
